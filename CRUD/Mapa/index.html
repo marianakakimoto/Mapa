@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+</head>
+<body>
+    <h1>Projeto com Mapas</h1>
+    <div id="map"></div>
+    <script>
+        const geo = {
+            lat: -23.53091,
+            long: -47.44925
+        }
+        let map = L.map('map').setView([geo.lat, geo.long], 15)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+            maxZoom: 19,
+            attribution: "OpenStreetMap"
+        }).addTo(map)
+        /* adicionar círculo */
+        let circle = L.circle([geo.lat, geo.long], {
+            color: '#EF3340',
+            fillColor: '#800A12',
+            fillOpacity: 0.70,
+            radius: 50 //raio do círculo em metros
+            }).addTo(map)
+        /*adicionar legenda ao círculo */
+        circle.bindTooltip('Fatec Votorantim')
+        circle.bindPopup('<b>Fatec Votorantim<b> <br> Criada em 2023 <br> <img src = "https://bkpsitecpsnew.blob.core.windows.net/uploadsitecps/sites/1/2023/02/52561425436_bb81cae2ab_o.jpg" width="200"/>').openPopup()
+    /* adicionar marcador */
+    let greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      
+      L.marker([51.5, -0.09], {icon: greenIcon}).addTo(map);
+    let marker = L.marker([-23.53234, -47.44976], {icon: greenIcon}).addTo(map)
+    marker.bindTooltip('Splice')
+    /* grupo de marcadores */
+    let restauranteA = L.marker([-23.534657, -47.448504]).bindPopup('Restaurante A'),
+    restauranteB = L.marker([-23.535267, -47.439983]).bindPopup('Restaurante B'),
+    restauranteC = L.marker([-23.539716, -47.441958]).bindPopup('Restaurante C')
+    let restaurantes = L.layerGroup([restauranteA, restauranteB, restauranteC])
+    restaurantes.eachLayer(function(layer){
+        layer.setIcon(greenIcon)
+    })
+    let overlayRestaurantes = {"Restaurantes": restaurantes}
+    layerControl = L.control.layers(null, overlayRestaurantes).addTo(map)
+
+    /* Trabalhando com o clique no mapa */
+    let popup = L.popup()
+    let criaMarcador = true
+    
+    function onMapClick(e){
+        if(criaMarcador){
+            popup
+            .setLatLng(e.latlng)
+            .setContent("Você clicou no mapa em" + e.latlng.toString())
+            .openOn(map)
+            let autoMarker = L.marker(e.latlng).addTo(map)
+        }
+    }
+    map.on('click', onMapClick)
+    /* Criando um botão personalizado no mapa */
+    let limpa = L.Control.extend({
+        onAdd: function (map){
+            let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control')
+            container.innerHTML = "<button onclick ='limparMarcadores()' class='limpa-mapa'>Limpar</button>"
+            return container
+        }
+    })
+    map.addControl(new limpa())
+    /* Função para limpar os marcadores */
+    function limparMarcadores(){
+        criaMarcador = false
+        map.eachLayer(function (layer){
+            if(layer instanceof L.Marker){
+                map.removeLayer(layer)
+            }
+        })
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+</head>
+<body>
+    <h1>Projeto com Mapas</h1>
+    <p id="mensagem"></p>
+    <div id="map"></div>
+    <script>
+        const geo = {
+            lat: -23.53091,
+            long: -47.44925
+        }
+        let map = L.map('map').setView([geo.lat, geo.long], 15)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+            maxZoom: 19,
+            attribution: "OpenStreetMap"
+        }).addTo(map)
+        /* Obtendo a geolocalização */
+        if(navigator.geolocation){
+            //Exibe msg inicial
+            document.getElementById('mensagem').textContent = 'Obtendo a localização, aguarde...'
+            navigator.geolocation.getCurrentPosition(function (position){
+                document.getElementById('mensagem').textContent = '✔Localização obtida com sucesso!'
+                geo.lat = position.coords.latitude
+                geo.long = position.coords.longitude
+                map.setView([geo.lat, geo.long], 16)
+            }, function (error){
+                document.getElementById('mensagem').textContent = '❌Usuário não autorizou a busca da localização'
+                console.log(error)
+            })
+        } else{
+            document.getElementById('mensagem').textContent = '❌Geolocalização não suportada pelo navegador'
+        }
+    </script>
+</body>
+</html>

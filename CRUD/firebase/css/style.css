@@ -1,0 +1,24 @@
+.login{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #b20000, #ffffff);
+}
+
+body{
+    font-family: 'Lexend', sans-serif;
+}
+
+#end, h4{
+    margin-top: 10px;
+}
+
+#map{
+    height: 80vh;
+    width: 48vw;
+    border: solid 1px black;
+    
+}

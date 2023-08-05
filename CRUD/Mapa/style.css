@@ -1,0 +1,19 @@
+body{
+    font-family: "montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+#map{
+    height: 50vh; /* viewport height */
+    width: 80vw; /* viewport weight */
+    border: solid 1px black
+}
+
+.limpa-mapa:hover{
+    background-color: darkblue;
+    color: white;
+}
